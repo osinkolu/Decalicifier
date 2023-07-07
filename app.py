@@ -37,18 +37,18 @@ mapping2 = {
 
 
 
-application = Flask(__name__)
+app = Flask(__name__)
 
 # Load the pickled model
 with open('decision_tree_model.pkl', 'rb') as file:
     model = pickle.load(file,encoding= "ASCII")
 
 
-@application.route('/')
+@app.route('/')
 def index():
     return("Welcome, please smile more")
 
-@application.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['POST'])
 def predict():
     # Retrieve the JSON payload from the request
     data = request.get_json()
@@ -70,4 +70,4 @@ def predict():
     return jsonify(response)
 
 if __name__ == '__main__':
-    application.run()
+    app.run()
