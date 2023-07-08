@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 import pickle
 import sklearn
 import pandas as pd
@@ -38,6 +39,8 @@ mapping2 = {
 
 
 app = Flask(__name__)
+cors = CORS(app) #Allow Cross Origin
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Load the pickled model
 with open('decision_tree_model.pkl', 'rb') as file:
@@ -45,10 +48,12 @@ with open('decision_tree_model.pkl', 'rb') as file:
 
 
 @app.route('/')
+@cross_origin()
 def index():
     return("Welcome, please smile more")
 
 @app.route('/predict', methods=['POST'])
+@cross_origin()
 def predict():
     # Retrieve the JSON payload from the request
     data = request.get_json()
