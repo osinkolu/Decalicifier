@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
-name: Build and deploy Python app to Azure Web App - Decalcifier
+name: Build and deploy Python app to Azure Web App - decalcifier
 
 on:
   push:
@@ -13,14 +13,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read #This is required for actions/checkout
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up Python version
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.11'
 
       - name: Create and start virtual environment
         run: |
@@ -31,13 +33,16 @@ jobs:
         run: pip install -r requirements.txt
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
-      
+
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
+
       - name: Upload artifact for deployment jobs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: python-app
           path: |
-            . 
+            release.zip
             !venv/
 
   deploy:
@@ -46,18 +51,21 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
+    
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: python-app
-          path: .
-          
+
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
+
+      
       - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'Decalcifier'
+          app-name: 'decalcifier'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_741F411CD73746569FB38D568085A7CA }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B8EA4478C5C74A598C738B6D3C6B21D4 }}
