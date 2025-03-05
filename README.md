@@ -2,7 +2,7 @@
 
 ## 📌 Project Overview
 
-Decalcifier is a machine learning-based API that predicts the number of hours required to decalcify different types of bone samples based on specific parameters.
+Decalcifier is a machine learning-based API that predicts the number of hours required to decalcify different types of bone samples based on specific parameters.&#x20;
 
 ## 🚀 How It Works
 
@@ -12,6 +12,12 @@ The model was trained on manually gathered data and uses a **Decision Tree Regre
 - The **type of fluid** used for decalcification (e.g., HCl, EDTA, etc.)
 - The **percentage concentration** of the fluid
 - The **date** when the decalcification was performed (day, month, year)
+
+### 📊 Quantitative Insights
+
+- **About 3800 data points** were collected in total for this project.
+- The model achieved an **R² score of 0.9948695408163637%**, indicating exceptional predictive performance.
+- We leveraged **explainable AI** and exported the decision tree, allowing us to fully understand how the model makes its predictions.
 
 The trained model is integrated into a Flask API that allows users to send input data and receive predictions.
 
